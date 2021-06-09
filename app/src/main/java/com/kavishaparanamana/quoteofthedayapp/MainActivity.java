@@ -1,20 +1,12 @@
 package com.kavishaparanamana.quoteofthedayapp;
 
 import android.app.ProgressDialog;
-import android.content.ActivityNotFoundException;
-import android.content.Context;
-import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
-import com.kavishaparanamana.quoteofthedayapp.controllers.QuoteOfTheDayController;
-import com.kavishaparanamana.quoteofthedayapp.repositories.Quote;
-import com.kavishaparanamana.quoteofthedayapp.utilities.GMailSender;
+import com.kavishaparanamana.quoteofthedayapp.controllers.EmailSenderController;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
@@ -23,10 +15,9 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
-import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
-    QuoteOfTheDayController quoteController;
+    EmailSenderController quoteController;
     AsyncTask<?, ?, ?> runningTask;
     ProgressDialog progressDialog;
 
@@ -104,7 +95,7 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         protected String doInBackground(Object... params) {
-            quoteController = new QuoteOfTheDayController();
+            quoteController = new EmailSenderController();
             try{
                 quoteController.getQuote();
               // Quote quoteObj= quoteController.getQuote();
@@ -121,6 +112,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(String result) {
             progressDialog.dismiss();
+
         }
     }
 }

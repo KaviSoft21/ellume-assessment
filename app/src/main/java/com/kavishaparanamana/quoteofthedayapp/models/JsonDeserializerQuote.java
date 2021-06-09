@@ -75,11 +75,12 @@ public class JsonDeserializerQuote implements JsonDeserializer<Response> {
         Copyright copyrightObj = new Copyright();
         copyrightObj.setUrl(copyrightJsonObject.get("url").getAsString());
         copyrightObj.setYear(copyrightJsonObject.get("year").getAsString());
+        reponseObj.setCopyright(copyrightObj);
 
         JsonObject SuccessJsonObject = jsonObject.get("success").getAsJsonObject();
         Success successObj = new Success();
         successObj.setTotal(SuccessJsonObject.get("total").getAsInt());
-
+        reponseObj.setSuccess(successObj);
 
         JsonObject contentsJsonObject = jsonObject.get("contents").getAsJsonObject();
         Contents contentObj = new Contents();
@@ -93,6 +94,7 @@ public class JsonDeserializerQuote implements JsonDeserializer<Response> {
         }
 
         contentObj.setQuotes(quotesArray);
+        reponseObj.setContents(contentObj);
         return reponseObj;
     }
 

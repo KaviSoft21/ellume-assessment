@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name"> Inspiring Quote of the day </string>
+    <string name="edit_text_hint">Recipients</string>
+    <string name="help_text">Add your recipients below separated by commas</string>
+    <string name="action_settings">Exit</string>
+
+    <string name="email_user">quoteellume21@gmail.com</string>
+    <string name="email_pass">Ellume21Mail!</string>
+</resources>

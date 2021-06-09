@@ -3,9 +3,11 @@ package com.kavishaparanamana.quoteofthedayapp;
 import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
+
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.kavishaparanamana.quoteofthedayapp.controllers.EmailSenderController;
+import com.kavishaparanamana.quoteofthedayapp.repositories.Quote;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -29,27 +31,24 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
 
 
-
         setSupportActionBar(toolbar);
 
-       FloatingActionButton fab = findViewById(R.id.fab);
+        FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                EditText editTxt = (EditText)findViewById(R.id.editText);
-                String textVal =editTxt.getText().toString();
-                if(textVal.matches("")){
+                EditText editTxt = (EditText) findViewById(R.id.editText);
+                String textVal = editTxt.getText().toString();
+                if (textVal.matches("")) {
                     Snackbar.make(view, "Please add recipients email address above.", Snackbar.LENGTH_LONG)
                             .setAction("Action", null).show();
-                }else{
-                    String[]  emails=(textVal).split(",");
+                } else {
+                    String[] emails = (textVal).split(",");
                     if (runningTask != null)
                         runningTask.cancel(true);
                     runningTask = new SendOperation(emails);
                     runningTask.execute();
                 }
-
-
 
 
             }
@@ -73,13 +72,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-
     private final class SendOperation extends AsyncTask<Object, Void, String> {
-        String[] emails ;
+        String[] emails;
 
-        SendOperation(String[] emails){
+        SendOperation(String[] emails) {
             super();
-            this.emails=emails;
+            this.emails = emails;
         }
 
         @Override
@@ -96,13 +94,10 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected String doInBackground(Object... params) {
             quoteController = new EmailSenderController();
-            try{
-                quoteController.getQuote();
-              // Quote quoteObj= quoteController.getQuote();
-                //quoteController.sendEmail(emails,quoteObj.getTitle(),quoteObj.getQuote(),true,getString(R.string.email_user),getString(R.string.email_pass));
-
-               // quoteController.sendEmail(emails,"Test emails ","",true,getString(R.string.email_user),getString(R.string.email_pass));
-            } catch (Exception e){
+            try {
+                Quote quoteObj = quoteController.getQuote();
+                quoteController.sendEmail(emails, quoteObj.getTitle(), quoteObj.getQuote(), true, getString(R.string.email_user), getString(R.string.email_pass));
+            } catch (Exception e) {
                 Log.e("getQuote", e.getMessage(), e);
             }
 

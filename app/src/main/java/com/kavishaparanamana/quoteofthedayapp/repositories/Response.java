@@ -8,8 +8,6 @@ public class Response {
     private Copyright CopyrightObject;
 
 
-    // Getter Methods
-
     public Success getSuccess() {
         return SuccessObject;
     }
@@ -25,8 +23,6 @@ public class Response {
     public Copyright getCopyright() {
         return CopyrightObject;
     }
-
-    // Setter Methods
 
     public void setSuccess(Success successObject) {
         this.SuccessObject = successObject;

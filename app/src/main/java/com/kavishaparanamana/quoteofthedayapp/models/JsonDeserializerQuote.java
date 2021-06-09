@@ -24,52 +24,13 @@ import java.util.Locale;
 
 public class JsonDeserializerQuote implements JsonDeserializer<Response> {
 
-   /* public Quote deserialize(JsonElement json, Type typeOfT,
-                             JsonDeserializationContext context) throws JsonParseException {
-
-        JsonObject quoteJson = json.getAsJsonObject();
-        Date date = null;
-
-        try {
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
-            date = sdf.parse(quoteJson.get("date").getAsString());
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-
-        List<String> tagList = new ArrayList<>();
-
-        JsonArray array = quoteJson.getAsJsonArray("tags");
-
-        for (int i = 0; i < array.size(); i++) {
-            tagList.add(array.get(i).getAsString());
-        }
-
-
-        Quote quote = new Quote();
-        quote.setQuote(quoteJson.get("quote").getAsString());
-        quote.setLength(quoteJson.get("length").getAsString());
-        quote.setAuthor(quoteJson.get("author").getAsString());
-        quote.setTags(tagList);
-        quote.setCategory(quoteJson.get("category").getAsString());
-        quote.setLanguage(quoteJson.get("language").getAsString());
-        quote.setDate(date);
-        quote.setPermalink(quoteJson.get("permalink").getAsString());
-        quote.setId(quoteJson.get("id").getAsInt());
-        quote.setBackground(quoteJson.get("background").getAsString());
-        quote.setTitle(quoteJson.get("title").getAsString());
-        return quote;
-    }*/
-
 
     public Response deserialize(JsonElement json, Type typeOfT,
                                 JsonDeserializationContext context) throws JsonParseException {
-
         JsonObject jsonObject = json.getAsJsonObject();
 
         Response reponseObj = new Response();
         reponseObj.setBaseurl(jsonObject.get("baseurl").getAsString());
-
 
         JsonObject copyrightJsonObject = jsonObject.get("copyright").getAsJsonObject();
         Copyright copyrightObj = new Copyright();
@@ -77,14 +38,17 @@ public class JsonDeserializerQuote implements JsonDeserializer<Response> {
         copyrightObj.setYear(copyrightJsonObject.get("year").getAsString());
         reponseObj.setCopyright(copyrightObj);
 
+
         JsonObject SuccessJsonObject = jsonObject.get("success").getAsJsonObject();
         Success successObj = new Success();
         successObj.setTotal(SuccessJsonObject.get("total").getAsInt());
         reponseObj.setSuccess(successObj);
 
+
         JsonObject contentsJsonObject = jsonObject.get("contents").getAsJsonObject();
         Contents contentObj = new Contents();
         JsonArray quotesJsonAarry = contentsJsonObject.get("quotes").getAsJsonArray();
+
 
         ArrayList<Quote> quotesArray = new ArrayList<>();
 
@@ -93,8 +57,10 @@ public class JsonDeserializerQuote implements JsonDeserializer<Response> {
             quotesArray.add(qo);
         }
 
+
         contentObj.setQuotes(quotesArray);
         reponseObj.setContents(contentObj);
+
         return reponseObj;
     }
 
@@ -110,6 +76,7 @@ public class JsonDeserializerQuote implements JsonDeserializer<Response> {
             e.printStackTrace();
         }
 
+
         List<String> tagList = new ArrayList<>();
 
         JsonArray array = jsonObject.getAsJsonArray("tags");
@@ -117,7 +84,6 @@ public class JsonDeserializerQuote implements JsonDeserializer<Response> {
         for (int i = 0; i < array.size(); i++) {
             tagList.add(array.get(i).getAsString());
         }
-
 
         Quote quote = new Quote();
         quote.setQuote(jsonObject.get("quote").getAsString());
@@ -128,7 +94,7 @@ public class JsonDeserializerQuote implements JsonDeserializer<Response> {
         quote.setLanguage(jsonObject.get("language").getAsString());
         quote.setDate(date);
         quote.setPermalink(jsonObject.get("permalink").getAsString());
-        quote.setId(jsonObject.get("id").getAsInt());
+        quote.setId(jsonObject.get("id").getAsString());
         quote.setBackground(jsonObject.get("background").getAsString());
         quote.setTitle(jsonObject.get("title").getAsString());
 

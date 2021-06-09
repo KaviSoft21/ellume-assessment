@@ -1,9 +1,8 @@
 package com.kavishaparanamana.quoteofthedayapp.repositories;
 
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
+
 
 public class Quote {
     private String quote;
@@ -14,10 +13,9 @@ public class Quote {
     private String language;
     private Date date;
     private String permalink;
-    private int id;
+    private String id;
     private String background;
     private String title;
-
 
 
     public String getQuote() {
@@ -69,7 +67,6 @@ public class Quote {
     }
 
 
-
     public String getPermalink() {
         return permalink;
     }
@@ -77,7 +74,6 @@ public class Quote {
     public void setPermalink(String permalink) {
         this.permalink = permalink;
     }
-
 
 
     public String getBackground() {
@@ -104,28 +100,15 @@ public class Quote {
         this.date = date;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 
 
-    /*@Override
-    public String toString() {
-        StringBuilder builder = new StringBuilder();
-        SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy, hh:mm:ss a", Locale.ENGLISH);
-
-        builder.append("Id: ").append(id).append(", ")
-                .append("First Name: ").append(firstName).append(", ")
-                .append("Last Name: ").append(lastName).append(", ")
-                .append("Date: ").append(sdf.format(date)).append(", ")
-                .append("Photo path: ").append(photo).append(", ")
-                .append("Is Married: ").append(married);
-        return builder.toString();
-    }*/
 }
 
 

@@ -4,9 +4,6 @@ public class Copyright {
     private String year;
     private String url;
 
-
-    // Getter Methods
-
     public String getYear() {
         return year;
     }
@@ -15,7 +12,6 @@ public class Copyright {
         return url;
     }
 
-    // Setter Methods
 
     public void setYear(String year) {
         this.year = year;

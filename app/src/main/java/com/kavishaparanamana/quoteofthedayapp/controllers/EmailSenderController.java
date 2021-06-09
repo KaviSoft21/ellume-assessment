@@ -9,11 +9,13 @@ import com.google.gson.reflect.TypeToken;
 import com.kavishaparanamana.quoteofthedayapp.R;
 import com.kavishaparanamana.quoteofthedayapp.models.JsonDeserializerQuote;
 import com.kavishaparanamana.quoteofthedayapp.repositories.Contents;
+import com.kavishaparanamana.quoteofthedayapp.repositories.Copyright;
 import com.kavishaparanamana.quoteofthedayapp.repositories.Quote;
 import com.kavishaparanamana.quoteofthedayapp.repositories.Response;
 import com.kavishaparanamana.quoteofthedayapp.utilities.API;
 import com.kavishaparanamana.quoteofthedayapp.utilities.GMailSender;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
@@ -31,20 +33,35 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class QuoteOfTheDayController {
+import javax.mail.internet.AddressException;
+import javax.mail.internet.InternetAddress;
 
+public class EmailSenderController {
+
+    public void getQuote(){
    // public Quote getQuote(){
-   public void getQuote(){
+//Quote quoteObj=new Quote();
             String content =getJSON(API.url);
-            Gson gson = new GsonBuilder().registerTypeAdapter(Response.class, new JsonDeserializerQuote())
-                    .serializeNulls().create();
 
-           // Quote quote = gson.fromJson(content, new TypeToken<Quote>(){}.getType());
-            System.out.println("TEST after "+content);
-            Response response =gson.fromJson(content, new TypeToken<Response>(){}.getType());
-            System.out.println("TEST quote title +++ "+response.getContents().getQuotes().get(0).getTitle());
+       try{
+           JSONObject nodeRoot  = new JSONObject(content);
+           JSONObject nodeContents = nodeRoot.getJSONObject("contents");
+           JSONArray array= nodeContents.getJSONArray("quotes");
 
-         //   return  response.getContents().getQuotes().get(0);
+           JSONObject node=array.getJSONObject(0);
+
+           Gson gson = new Gson();
+
+           Response quoteObj = gson.fromJson(content, Response.class);
+
+        //   System.out.println("TEST quote done node title "+node.get("title"));
+           System.out.println("TEST quote done Baseurl "+ quoteObj.getBaseurl());
+           System.out.println("TEST quote done total "+ quoteObj.getSuccess().getTotal());
+
+       }catch (Exception e){
+
+       }
+      // return
     }
 
 
@@ -61,14 +78,14 @@ public class QuoteOfTheDayController {
             c.setReadTimeout(timeout);*/
             c.connect();
             int status = c.getResponseCode();
+            System.out.println("TEST  status"+status);
             switch (status) {
                 case 200:
-                case 201:
                     BufferedReader br = new BufferedReader(new InputStreamReader(c.getInputStream()));
                     StringBuilder sb = new StringBuilder();
                     String line;
                     while ((line = br.readLine()) != null) {
-                        sb.append(line+"\n");
+                        sb.append(line);
                     }
                     br.close();
                     return sb.toString();
@@ -90,48 +107,37 @@ public class QuoteOfTheDayController {
         return null;
     }
 
-    private static String fetchContent(String uri) throws IOException {
-        System.out.println("TEST  fetchContent");
-        final int OK = 200;
-        URL url = new URL(uri);
-        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-        String returnObj;
 
-        int responseCode = connection.getResponseCode();
-        System.out.println("TEST done"+responseCode);
-        if(responseCode == OK){
-            System.out.println("TEST OK");
-
-
-            BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-            StringBuilder sb = new StringBuilder();
-            String line;
-            while ((line = br.readLine()) != null) {
-                sb.append(line+"\n");
-            }
-            br.close();
-            System.out.println("TEST done"+sb.toString());
-            return sb.toString();
-        }
-        System.out.println("TEST null"+responseCode);
-        return null;
-    }
 
 
     public void sendEmail(String[] emails, String subject,String body, boolean forceGmail,String user, String pass) {
         try {
             for(int i=0; i < emails.length;i++){
-                GMailSender sender = new GMailSender(user, pass);
-                sender.sendMail(subject,
-                        body,
-                        user,
-                        emails[i]);
+                if(isValidEmailAddress(emails[i])){
+                    GMailSender sender = new GMailSender(user, pass);
+                    sender.sendMail(subject,
+                            body,
+                            user,
+                            emails[i]);
+                }
+
             }
 
         } catch (Exception e) {
             Log.e("SendMail", e.getMessage(), e);
         }
 
+    }
+
+    public static boolean isValidEmailAddress(String email) {
+        boolean result = true;
+        try {
+            InternetAddress emailAddr = new InternetAddress(email);
+            emailAddr.validate();
+        } catch (AddressException ex) {
+            result = false;
+        }
+        return result;
     }
 
 }
